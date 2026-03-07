@@ -23,11 +23,13 @@
 }
 
 body {
+  overflow-x: hidden;
   background-color: var(--havia-offwhite);
   color: var(--havia-charcoal);
   font-family: "Work Sans", sans-serif, Helvetica, 'Open Sans';
 }
 
 html {
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
