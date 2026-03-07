@@ -31,15 +31,15 @@ export default function Portfolio() {
     {
       id: 1,
       title: "Modern House",
-      category: "Residential",
-      image: "/havia-project-1.jpg",
+      category: "Private",
+      image: "/havia-project-5.jpg",
       location: "Dago, Bandung",
       year: "2023",
       client: "John Doe",
       scope: ["Architecture", "Interior", "Landscape"],
       story: "A contemporary residence blending indoor and outdoor living.",
       images: [
-        "/havia-project-1.jpg",
+        "/havia-project-5.jpg",
         "/havia-project-2.jpg",
         "/havia-project-3.jpg",
       ],
@@ -47,15 +47,15 @@ export default function Portfolio() {
     {
       id: 2,
       title: "City Clinic",
-      category: "Healthcare",
-      image: "/havia-project-2.jpg",
+      category: "Public",
+      image: "/havia-project-4.jpg",
       location: "Jakarta",
       year: "2022",
       client: "PT Medika Sehat",
       scope: ["Architecture", "Interior"],
       story: "Designed to create a calm healing environment.",
       images: [
-        "/havia-project-2.jpg",
+        "/havia-project-4.jpg",
         "/havia-project-1.jpg",
         "/havia-project-3.jpg",
       ],
@@ -63,7 +63,7 @@ export default function Portfolio() {
     {
       id: 3,
       title: "Tropical Villa",
-      category: "Residential",
+      category: "Private",
       image: "/havia-project-3.jpg",
       location: "Bali",
       year: "2024",
@@ -79,43 +79,43 @@ export default function Portfolio() {
     {
       id: 4,
       title: "Private Residence",
-      category: "Residential",
-      image: "/havia-project-1.jpg",
+      category: "Private",
+      image: "/havia-project-2.jpg",
       location: "Bandung",
       year: "2023",
       client: "Michael Lee",
       scope: ["Architecture", "Interior"],
       story: "A modern home prioritizing comfort.",
-      images: ["/havia-project-1.jpg", "/havia-project-2.jpg"],
+      images: ["/havia-project-2.jpg", "/havia-project-2.jpg"],
     },
     {
       id: 5,
       title: "Dental Center",
-      category: "Healthcare",
-      image: "/havia-project-2.jpg",
+      category: "Public",
+      image: "/havia-project-1.jpg",
       location: "Jakarta",
       year: "2022",
       client: "Smile Dental Clinic",
       scope: ["Architecture", "Interior"],
       story: "Clean and welcoming healthcare space.",
-      images: ["/havia-project-2.jpg", "/havia-project-3.jpg"],
+      images: ["/havia-project-1.jpg", "/havia-project-3.jpg"],
     },
     {
       id: 6,
       title: "Urban Retreat",
-      category: "Commercial",
-      image: "/havia-project-3.jpg",
-      location: "Lembang",
+      category: "Public",
+      image: "/havia-project-4.jpg",
+      location: "Lembang, Bandung",
       year: "2024",
       client: "CityLife Co.",
       scope: ["Architecture", "Interior", "Landscape"],
       story: "A peaceful oasis within urban environment.",
-      images: ["/havia-project-3.jpg", "/havia-project-1.jpg"],
+      images: ["/havia-project-4.jpg", "/havia-project-1.jpg"],
     },
     {
       id: 7,
       title: "Co-working Space",
-      category: "Commercial",
+      category: "Public",
       image: "/havia-project-1.jpg",
       location: "Bandung",
       year: "2024",
@@ -124,9 +124,20 @@ export default function Portfolio() {
       story: "Workspace designed for collaboration and productivity.",
       images: ["/havia-project-1.jpg", "/havia-project-2.jpg"],
     },
+    {
+      id: 8,
+      title: "Green Ecotourism",
+      category: "Masterplan",
+      image: "/havia-project-6.jpg",
+      location: "Padang Pariaman",
+      year: "2024",
+      client: "Collab Workspaces",
+      scope: ["Architecture"],
+      images: ["/havia-project-6.jpg", "/havia-project-2.jpg"],
+    },
   ];
 
-  const categories = ["All", "Residential", "Healthcare", "Commercial"];
+  const categories = ["All", "Private", "Public", "Masterplan"];
 
   const filtered =
     activeCategory === "All"
@@ -160,9 +171,9 @@ export default function Portfolio() {
 
           {/* Tombol Download PDF */}
           <a
-            href="/portfolio.pdf"
+            href="/havia-portofolio.pdf"
             download
-            className="text-[10px] md:text-xs uppercase tracking-[0.15em] text-white bg-havia-gold px-3 py-1.5 md:px-5 md:py-2 rounded hover:bg-yellow-600 transition whitespace-nowrap"
+            className="text-[10px] md:text-xs uppercase tracking-[0.15em] text-white bg-havia-gold px-3 py-1.5 md:px-5 md:py-2 rounded-full hover:opacity-90 transition whitespace-nowrap"
           >
             Download Portfolio
           </a>
