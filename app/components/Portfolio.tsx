@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
+import { X } from "lucide-react";
 
 type Project = {
   id: number;
@@ -9,13 +10,21 @@ type Project = {
   category: string;
   image: string;
   location: string;
-  story: string;
+  year: string;
+  story?: string;
+  client?: string;
+  scope?: string[];
+  images: string[];
 };
 
 export default function Portfolio() {
-  const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
+
+  const portfolioRef = useRef<HTMLElement | null>(null);
+
   const itemsPerPage = 6;
 
   const projects: Project[] = [
@@ -25,16 +34,31 @@ export default function Portfolio() {
       category: "Residential",
       image: "/havia-project-1.jpg",
       location: "Dago, Bandung",
+      year: "2023",
+      client: "John Doe",
+      scope: ["Architecture", "Interior", "Landscape"],
       story: "A contemporary residence blending indoor and outdoor living.",
+      images: [
+        "/havia-project-1.jpg",
+        "/havia-project-2.jpg",
+        "/havia-project-3.jpg",
+      ],
     },
     {
       id: 2,
       title: "City Clinic",
       category: "Healthcare",
       image: "/havia-project-2.jpg",
-      location: "Lenteng Agung, Jakarta",
-      story:
-        "Designed to create a calm healing environment through spatial clarity.",
+      location: "Jakarta",
+      year: "2022",
+      client: "PT Medika Sehat",
+      scope: ["Architecture", "Interior"],
+      story: "Designed to create a calm healing environment.",
+      images: [
+        "/havia-project-2.jpg",
+        "/havia-project-1.jpg",
+        "/havia-project-3.jpg",
+      ],
     },
     {
       id: 3,
@@ -42,15 +66,27 @@ export default function Portfolio() {
       category: "Residential",
       image: "/havia-project-3.jpg",
       location: "Bali",
-      story: "A serene retreat that harmonizes with its lush surroundings.",
+      year: "2024",
+      client: "Jane Smith",
+      scope: ["Architecture", "Landscape"],
+      story: "A serene retreat in tropical landscape.",
+      images: [
+        "/havia-project-3.jpg",
+        "/havia-project-1.jpg",
+        "/havia-project-2.jpg",
+      ],
     },
     {
       id: 4,
       title: "Private Residence",
       category: "Residential",
       image: "/havia-project-1.jpg",
-      location: "Buah Batu, Bandung",
-      story: "A modern home that prioritizes comfort and functionality.",
+      location: "Bandung",
+      year: "2023",
+      client: "Michael Lee",
+      scope: ["Architecture", "Interior"],
+      story: "A modern home prioritizing comfort.",
+      images: ["/havia-project-1.jpg", "/havia-project-2.jpg"],
     },
     {
       id: 5,
@@ -58,15 +94,23 @@ export default function Portfolio() {
       category: "Healthcare",
       image: "/havia-project-2.jpg",
       location: "Jakarta",
-      story: "A clean and welcoming space designed for patient care.",
+      year: "2022",
+      client: "Smile Dental Clinic",
+      scope: ["Architecture", "Interior"],
+      story: "Clean and welcoming healthcare space.",
+      images: ["/havia-project-2.jpg", "/havia-project-3.jpg"],
     },
     {
       id: 6,
       title: "Urban Retreat",
       category: "Commercial",
       image: "/havia-project-3.jpg",
-      location: "Lembang, Bandung",
-      story: "A peaceful oasis in the heart of the city.",
+      location: "Lembang",
+      year: "2024",
+      client: "CityLife Co.",
+      scope: ["Architecture", "Interior", "Landscape"],
+      story: "A peaceful oasis within urban environment.",
+      images: ["/havia-project-3.jpg", "/havia-project-1.jpg"],
     },
     {
       id: 7,
@@ -74,8 +118,11 @@ export default function Portfolio() {
       category: "Commercial",
       image: "/havia-project-1.jpg",
       location: "Bandung",
-      story:
-        "A modern workspace designed to foster collaboration and creativity.",
+      year: "2024",
+      client: "Collab Workspaces",
+      scope: ["Architecture", "Interior"],
+      story: "Workspace designed for collaboration and productivity.",
+      images: ["/havia-project-1.jpg", "/havia-project-2.jpg"],
     },
   ];
 
@@ -87,30 +134,42 @@ export default function Portfolio() {
       : projects.filter((p) => p.category === activeCategory);
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
+
   const paginatedProjects = filtered.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
 
   return (
-    <section id="portfolio" className="py-20 bg-havia-white">
-      <div className="max-w-7xl mx-auto px-8">
+    <section id="portfolio" ref={portfolioRef} className="py-24 bg-havia-white">
+      <div className="max-w-7xl mx-auto px-6 md:px-8">
         {/* Heading */}
-        <div className="mb-10">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="h-[1px] w-10 bg-havia-gold" />
-            <span className="text-xs tracking-[0.2em] uppercase text-havia-gold font-semibold">
-              Portfolio
-            </span>
+        <div className="mb-10 flex items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-4 mb-2 md:mb-6">
+              <div className="h-[1px] w-10 bg-havia-gold" />
+              <span className="text-xs uppercase tracking-[0.2em] text-havia-gold font-semibold">
+                Portfolio
+              </span>
+            </div>
+
+            <h2 className="text-3xl md:text-4xl font-[Helvetica] text-havia-charcoal">
+              Selected Works
+            </h2>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-[Helvetica] text-havia-charcoal">
-            Selected Works
-          </h2>
+          {/* Tombol Download PDF */}
+          <a
+            href="/portfolio.pdf"
+            download
+            className="text-[10px] md:text-xs uppercase tracking-[0.15em] text-white bg-havia-gold px-3 py-1.5 md:px-5 md:py-2 rounded hover:bg-yellow-600 transition whitespace-nowrap"
+          >
+            Download Portfolio
+          </a>
         </div>
 
         {/* Filter */}
-        <div className="flex gap-10 mb-14">
+        <div className="flex gap-6 md:gap-10 mb-10 overflow-x-auto">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -118,10 +177,10 @@ export default function Portfolio() {
                 setActiveCategory(cat);
                 setCurrentPage(1);
               }}
-              className={`text-xs uppercase tracking-[0.2em] transition ${
+              className={`text-xs uppercase tracking-[0.2em] whitespace-nowrap ${
                 activeCategory === cat
-                  ? "text-havia-charcoal border-b border-havia-charcoal"
-                  : "text-havia-charcoal/50 hover:text-[var(--havia-gold)]"
+                  ? "text-havia-gold border-b border-havia-gold"
+                  : "text-havia-charcoal/50 hover:text-[var(--havia-gold)] transition"
               }`}
             >
               {cat}
@@ -129,8 +188,8 @@ export default function Portfolio() {
           ))}
         </div>
 
-        {/* Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Desktop Grid */}
+        <div className="hidden md:grid grid-cols-3 gap-8">
           {paginatedProjects.map((project) => (
             <div
               key={project.id}
@@ -145,73 +204,202 @@ export default function Portfolio() {
                   className="object-cover transition duration-700 group-hover:scale-105"
                 />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition duration-500 flex flex-col justify-end p-6">
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition duration-500 flex items-end p-6">
                   <div className="opacity-0 group-hover:opacity-100 transition duration-500">
                     <p className="text-xs uppercase tracking-[0.1em] text-havia-gold mb-2 font-medium">
                       {project.location}
                     </p>
 
-                    <p className="text-sm text-white/90 leading-relaxed mb-3">
+                    <p className="text-sm text-white/90 line-clamp-1">
                       {project.story}
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Title */}
-              <h3 className="mt-4 text-sm tracking-wide text-havia-charcoal font-medium">
+              <h3 className="mt-4 text-sm text-havia-charcoal font-medium">
                 {project.title}
               </h3>
             </div>
           ))}
         </div>
-      </div>
 
-      {/* Lightbox */}
-      {selectedProject && (
-        <div
-          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
-          onClick={() => setSelectedProject(null)}
-        >
-          <div className="relative max-w-5xl w-full px-8">
-            <Image
-              src={selectedProject.image}
-              alt={selectedProject.title}
-              width={1400}
-              height={900}
-              className="w-full h-auto object-contain"
-            />
+        {/* Mobile Slider */}
+        <div className="md:hidden flex gap-6 overflow-x-auto snap-x">
+          {filtered.map((project) => (
+            <div
+              key={project.id}
+              onClick={() => setSelectedProject(project)}
+              className="min-w-[80%] snap-center cursor-pointer"
+            >
+              <div className="relative h-64">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <h3 className="mt-4 text-sm text-havia-charcoal font-medium">
+                {project.title}
+              </h3>
+
+              <p className="text-xs text-havia-charcoal/60 mt-1">
+                {project.location}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination Desktop */}
+        {totalPages > 1 && (
+          <div className="hidden md:flex justify-center items-center gap-6 mt-16">
+            <button
+              onClick={() => {
+                setCurrentPage((p) => Math.max(p - 1, 1));
+                portfolioRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+              className="text-xs uppercase tracking-[0.2em] hover:text-[var(--havia-gold)]"
+            >
+              Prev
+            </button>
+
+            <span className="text-xs">
+              {currentPage} / {totalPages}
+            </span>
 
             <button
-              onClick={() => setSelectedProject(null)}
-              className="absolute top-4 right-8 text-white text-xs uppercase tracking-[0.3em]"
+              onClick={() => {
+                setCurrentPage((p) => Math.min(p + 1, totalPages));
+                portfolioRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+              className="text-xs uppercase tracking-[0.2em] hover:text-[var(--havia-gold)]"
             >
-              Close
+              Next
             </button>
           </div>
-        </div>
-      )}
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-6 mt-16">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            className="text-xs uppercase tracking-[0.2em] text-havia-charcoal/50 hover:text-[var(--havia-gold)] transition"
-          >
-            Prev
-          </button>
+        )}
+      </div>
 
-          <span className="text-xs tracking-[0.2em] text-havia-charcoal">
-            {currentPage} / {totalPages}
-          </span>
+      {/* Project Modal */}
+      {selectedProject && (
+        <div className="fixed inset-0 bg-black/80 z-50 overflow-y-auto">
+          <div className="min-h-screen flex items-start md:items-center justify-center p-4 md:p-10 mt-20 md:mt-0">
+            <div className="bg-white max-w-7xl w-full rounded-sm shadow-xl relative">
+              {/* CLOSE BUTTON */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-4 right-4 md:top-6 md:right-6 z-20 p-2 bg-white/90 rounded-full shadow hover:scale-105 transition"
+              >
+                <X size={20} />
+              </button>
 
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            className="text-xs uppercase tracking-[0.2em] text-havia-charcoal/50 hover:text-[var(--havia-gold)] transition"
-          >
-            Next
-          </button>
+              {/* CONTENT */}
+              <div className="grid md:grid-cols-2">
+                {/* LEFT IMAGE */}
+                <div className="bg-havia-offwhite p-4 md:p-6">
+                  <div className="relative h-[260px] md:h-[520px] w-full mb-4">
+                    <Image
+                      src={selectedProject.images[activeImage]}
+                      alt=""
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 overflow-x-auto">
+                    {selectedProject.images.map((img, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveImage(i)}
+                        className={`relative w-20 h-16 flex-shrink-0 border ${
+                          activeImage === i
+                            ? "border-havia-gold"
+                            : "border-transparent"
+                        }`}
+                      >
+                        <Image src={img} alt="" fill className="object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* RIGHT CONTENT */}
+                <div className="p-5 md:p-12 font-[Helvetica]">
+                  <div className="flex items-center gap-4 mb-4 md:mb-6">
+                    <div className="h-[1px] w-8 bg-havia-gold" />
+                    <span className="text-[10px] md:text-xs uppercase tracking-[0.25em] text-havia-gold font-semibold">
+                      Project
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl md:text-3xl text-havia-charcoal mb-4">
+                    {selectedProject.title}
+                  </h3>
+
+                  {/* DESCRIPTION */}
+                  {selectedProject.story && (
+                    <p className="text-sm text-havia-charcoal/80 leading-relaxed mb-6">
+                      {selectedProject.story}
+                    </p>
+                  )}
+
+                  {/* INFO */}
+                  <div className="border-t pt-6 grid grid-cols-2 gap-4 md:gap-6 text-sm">
+                    {/* LEFT COLUMN */}
+                    <div className="space-y-4">
+                      <div>
+                        <span className="text-havia-charcoal/60 font-semibold">
+                          Location
+                        </span>
+                        <p>{selectedProject.location}</p>
+                      </div>
+
+                      <div>
+                        <span className="text-havia-charcoal/60 font-semibold">
+                          Year
+                        </span>
+                        <p>{selectedProject.year}</p>
+                      </div>
+
+                      {selectedProject.client && (
+                        <div>
+                          <span className="text-havia-charcoal/60 font-semibold">
+                            Client
+                          </span>
+                          <p>{selectedProject.client}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* RIGHT COLUMN */}
+                    <div className="space-y-4">
+                      {selectedProject.scope && (
+                        <div>
+                          <span className="text-havia-charcoal/60 font-semibold">
+                            Scope of Work
+                          </span>
+                          <p>{selectedProject.scope.join(", ")}</p>
+                        </div>
+                      )}
+
+                      <div>
+                        <span className="text-havia-charcoal/60 font-semibold">
+                          Category
+                        </span>
+                        <p>{selectedProject.category}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </section>

@@ -5,7 +5,7 @@ import { MessageCircle } from "lucide-react";
 export default function WhatsappCTA() {
   return (
     <a
-      href="https://wa.me/628112430121" // ganti nomor kamu
+      href="https://wa.me/628112430121"
       target="_blank"
       rel="noopener noreferrer"
       className="

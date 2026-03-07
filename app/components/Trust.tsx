@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Testimonial = {
   id: number;
@@ -14,7 +16,7 @@ export default function Trust() {
   const testimonials: Testimonial[] = [
     {
       id: 1,
-      image: "/havia-project-1.jpg",
+      image: "/havia-testimonial-1.jpg",
       quote:
         "Havia Studio delivered beyond expectation. The design feels timeless and deeply thoughtful.",
       name: "Residential Client",
@@ -22,7 +24,7 @@ export default function Trust() {
     },
     {
       id: 2,
-      image: "/havia-project-2.jpg",
+      image: "/havia-testimonial-2.jpg",
       quote:
         "Professional, detail-oriented, and visionary in every aspect of the project execution.",
       name: "Healthcare Project Owner",
@@ -30,16 +32,52 @@ export default function Trust() {
     },
   ];
 
+  const clients = [
+    "/logo-client-1.png",
+    "/logo-client-2.png",
+    "/logo-client-3.png",
+    "/logo-client-4.png",
+    "/logo-client-5.png",
+    "/logo-client-6.png",
+    "/logo-client-7.png",
+    "/logo-client-8.png",
+    "/logo-client-9.png",
+    "/logo-client-10.png",
+    "/logo-client-11.png",
+    "/logo-client-12.png",
+  ];
+
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(14);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setPerPage(6);
+      } else {
+        setPerPage(14);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const totalPages = Math.ceil(clients.length / perPage);
+
+  const visibleClients = clients.slice((page - 1) * perPage, page * perPage);
+
   return (
     <section id="trust" className="py-20 bg-havia-offwhite">
-      <div className="max-w-7xl mx-auto px-8">
-
+      <div className="max-w-7xl mx-auto px-6 md:px-8">
         {/* Heading */}
-        <div className="mb-10">
+        <div className="mb-14">
           <div className="flex items-center gap-4 mb-6">
             <div className="h-[1px] w-10 bg-havia-gold" />
             <span className="text-xs tracking-[0.2em] uppercase text-havia-gold font-semibold">
-              Trust
+              Testimonial
             </span>
           </div>
 
@@ -48,27 +86,16 @@ export default function Trust() {
           </h2>
         </div>
 
-        {/* Logo Clients */}
-        {/* <div className="flex flex-wrap items-center gap-16 mb-28 opacity-70">
-          <Image src="/havia-client-1.png" alt="Client 1" width={120} height={40} className="grayscale hover:grayscale-0 transition" />
-          <Image src="/havia-client-2.png" alt="Client 2" width={120} height={40} className="grayscale hover:grayscale-0 transition" />
-          <Image src="/havia-client-3.png" alt="Client 3" width={120} height={40} className="grayscale hover:grayscale-0 transition" />
-        </div>  */}
-
-        {/* Testimonials Zig-Zag */}
-        <div className="space-y-28">
-
+        {/* TESTIMONIALS */}
+        <div className="space-y-16 md:space-y-28 mb-24">
           {testimonials.map((item, index) => (
             <div
               key={item.id}
-              className={`grid md:grid-cols-2 gap-16 items-center ${
-                index % 2 !== 0 ? "md:flex-row-reverse" : ""
-              }`}
+              className="grid md:grid-cols-2 gap-10 md:gap-16 items-center"
             >
-
               {/* Image */}
               <div className={`${index % 2 !== 0 ? "md:order-2" : ""}`}>
-                <div className="relative h-[420px] w-full overflow-hidden">
+                <div className="relative h-[260px] md:h-[420px] w-full overflow-hidden">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -80,25 +107,84 @@ export default function Trust() {
 
               {/* Text */}
               <div className={`${index % 2 !== 0 ? "md:order-1" : ""}`}>
-                <p className="text-lg md:text-xl leading-relaxed text-havia-charcoal italic">
+                <p className="text-base md:text-xl leading-relaxed text-havia-charcoal italic">
                   “{item.quote}”
                 </p>
 
-                <div className="mt-8">
+                <div className="mt-6 md:mt-8">
                   <p className="text-sm uppercase tracking-[0.2em] text-havia-charcoal">
                     {item.name}
                   </p>
-                  <p className="text-sm text-havia-charcoal/60 mt-2">
+                  <p className="text-sm text-havia-charcoal/60 mt-1 md:mt-2">
                     {item.role}
                   </p>
                 </div>
               </div>
-
             </div>
           ))}
-
         </div>
 
+        {/* CLIENTS */}
+        <div className="border-t pt-16">
+          {/* HEADING */}
+          <div className="relative mb-14 flex items-center">
+            {/* GOLD BLOCK */}
+            <div className="w-6 md:w-10 h-16 md:h-20 bg-havia-gold mr-6" />
+
+            {/* TEXT + LINE */}
+            <div className="flex-1">
+              <h3 className="text-xl md:text-2xl font-[Helvetica] text-havia-charcoal mb-2">
+                Our Clients
+              </h3>
+
+              <div className="h-[1px] bg-havia-charcoal/30 w-full" />
+            </div>
+          </div>
+
+          {/* LOGO GRID */}
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-8 items-center opacity-70">
+            {visibleClients.map((logo, i) => (
+              <div key={i} className="flex justify-center">
+                <Image
+                  src={logo}
+                  alt="Client Logo"
+                  width={110}
+                  height={40}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* STILL COUNTING */}
+          {page === totalPages && (
+            <p className="text-center mt-10 text-sm tracking-[0.25em] text-havia-charcoal opacity-40 font-medium">
+              — And still counting —
+            </p>
+          )}
+
+          {/* PAGINATION */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-6 mt-8">
+              <button
+                onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                className="p-2 border border-havia-charcoal/20 rounded-full hover:border-havia-gold hover:text-havia-gold transition"
+              >
+                <ChevronLeft size={16} />
+              </button>
+
+              <span className="text-xs tracking-widest text-havia-charcoal/60">
+                {page} / {totalPages}
+              </span>
+
+              <button
+                onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                className="p-2 border border-havia-charcoal/20 rounded-full hover:border-havia-gold hover:text-havia-gold transition"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
